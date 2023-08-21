@@ -1,0 +1,16 @@
+@AsyncEnumerableApi_HostAddress = http://localhost:5213
+
+GET {{AsyncEnumerableApi_HostAddress}}/stream/int
+Accept: application/json
+
+###
+
+GET {{AsyncEnumerableApi_HostAddress}}/stream/string
+Accept: application/json
+
+###
+
+GET {{AsyncEnumerableApi_HostAddress}}/stream/object
+Accept: application/json
+
+###
