@@ -10,11 +10,11 @@
     <div id="response"></div>
     <script>
         function tolerantParse(str) {
-            // 移除開頭不需要的逗號和 [ 符號
+            // 移除開頭的逗號和 [ 符號
             if (str.startsWith(',') || str.startsWith('[')) str = str.slice(1).trim();
-            // 移除結尾不需要的 [ 符號
+            // 移除結尾的 ] 符號
             if (str.endsWith(']')) str = str.slice(0, -1);
-            return str;
+            return `[${str}]`;
         }
 
         function stream(callback) {
