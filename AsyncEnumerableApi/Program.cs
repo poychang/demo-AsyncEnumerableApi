@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace AsyncEnumerableApi
 {
@@ -10,7 +10,6 @@ namespace AsyncEnumerableApi
             builder.Services.AddControllers();
 
             var app = builder.Build();
-            app.UseHttpsRedirection();
             app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -55,6 +54,33 @@ namespace AsyncEnumerableApi
             {
                 await Task.Delay(TimeSpan.FromSeconds(1));
                 yield return new Demo { Id = i, Name = Guid.NewGuid().ToString() };
+            }
+        }
+
+        [HttpGet]
+        [Route("just-string")]
+        public async Task<IActionResult> GetJustString()
+        {
+            // 設定回應的 Content-Type
+            Response.Headers.Append("Content-Type", "text/plain");
+            // 逐筆將資料加到回應內容中
+            await foreach (var item in Streaming())
+            {
+                if (item is null) continue;
+                await Response.WriteAsync(item);
+            }
+            // 完成回應
+            await Response.CompleteAsync();
+            // 最終返回一個空結果
+            return new EmptyResult();
+
+            async IAsyncEnumerable<string> Streaming()
+            {
+                for (int i = 0; i < MAX; i++)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    yield return Guid.NewGuid().ToString();
+                }
             }
         }
     }
